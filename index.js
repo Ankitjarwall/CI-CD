@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
         dbPassword: process.env.SECRET_DB_PASSWORD,
     };
 
+    
     res.json({
         message: "Secrets retrieved successfully.",
         secrets,
