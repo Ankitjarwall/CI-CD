@@ -14,11 +14,18 @@ app.get("/", (req, res) => {
         dbPassword: process.env.SECRET_DB_PASSWORD,
     };
 
-    
-    res.json({
-        message: "Secrets retrieved successfully.",
-        secrets,
-    });
+    if (secrets.apiKey === "api.macbease.com") {
+        res.json({
+            message: "Secrets retrieved successfully.",
+            status: "Success",
+            secrets,
+        });
+    } else {
+        res.status(401).json({
+            message: "Unauthorized: Invalid SECRET_API_KEY",
+            status: "Failure",
+        });
+    }
 });
 
 // Start the server
