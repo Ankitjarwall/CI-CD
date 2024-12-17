@@ -1,46 +1,43 @@
-name: Test Node.js Secrets
+name: Deploy Node.js Server
 
 on:
   push:
     branches:
-      - main
-  workflow_dispatch: # Allows manual trigger
+      - main # Triggers workflow on push to main branch
 
 jobs:
-  test-secrets:
-    runs-on: self-hosted
-    env:
-      CUSTOM_VARIABLE: "This is a GitHub variable."
+  deploy:
+    runs-on: ubuntu-latest # Use a Linux-based GitHub Runner
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout Code
+      # Step 1: Checkout repository code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install Dependencies
-      - name: Install Dependencies
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Use the Node.js version you prefer
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
         run: npm install
 
-      # Step 3: Start the Server with Secrets
-      - name: Start Backend and Test Secrets
-        env: # Pass secrets directly to the Node.js process
-          SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          CUSTOM_VARIABLE: ${{ env.CUSTOM_VARIABLE }}
+      # Step 4: Create .env file with GitHub Secrets
+      - name: Create .env file
         run: |
-          echo "Starting Node.js server with secrets..."
-          SECRET_API_KEY=${{ secrets.SECRET_API_KEY }} \
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-          CUSTOM_VARIABLE="${{ env.CUSTOM_VARIABLE }}" \
-          node index.js & # Start the server
-          sleep 5 # Allow the server to start
-          curl http://localhost:3000 # Test the endpoint
+          echo "SECRET_API_KEY=${{ secrets.SECRET_API_KEY }}" >> .env
+          echo "SECRET_DB_PASSWORD=${{ secrets.SECRET_DB_PASSWORD }}" >> .env
+          echo "CUSTOM_VARIABLE=${{ secrets.CUSTOM_VARIABLE }}" >> .env
+          echo "PORT=3000" >> .env
 
-      # Step 4: Validate Response
-      - name: Validate Secrets in Response
+      # Step 5: Run the server
+      - name: Start server
         run: |
-          RESPONSE=$(curl -s http://localhost:3000)
-          echo "Response: $RESPONSE"
-          if [[ $RESPONSE != *"Secrets retrieved successfully."* ]]; then
-            echo "Secrets not fetched correctly!" && exit 1
-          fi
+          node index.js &
+          sleep 5 # Allow server to start
+
+      # Step 6: Test the server
+      - name: Test server response
+        run: curl -f http://localhost:3000
