@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Use a Linux-based GitHub Runner
+    runs-on: self-hosted # Use self-hosted runner instead of ubuntu-latest
 
     steps:
       # Step 1: Checkout repository code
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Use the Node.js version you prefer
+          node-version: '20' # Use your preferred Node.js version
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
       - name: Start server
         run: |
           node index.js &
-          sleep 5 # Allow server to start
+          sleep 5 # Allow the server time to start
 
       # Step 6: Test the server
       - name: Test server response
