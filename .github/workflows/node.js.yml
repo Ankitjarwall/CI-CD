@@ -9,6 +9,8 @@ on:
 jobs:
   test-secrets:
     runs-on: self-hosted
+    env:
+      CUSTOM_VARIABLE: "This is a GitHub variable."
 
     steps:
       # Step 1: Check out the repository
@@ -24,6 +26,7 @@ jobs:
         env: # Inject secrets into environment variables
           SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          CUSTOM_VARIABLE: ${{ env.CUSTOM_VARIABLE }}
         run: |
           node index.js & # Start the server in the background
           sleep 5 # Allow the server to start
