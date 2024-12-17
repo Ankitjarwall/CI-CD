@@ -1,43 +1,27 @@
-name: Deploy Node.js Server
-
-on:
-  push:
-    branches:
-      - main # Triggers workflow on push to main branch
+name: CI/CD Pipeline
+on: [push]
 
 jobs:
-  deploy:
-    runs-on: self-hosted # Use self-hosted runner instead of ubuntu-latest
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use your preferred Node.js version
+          node-version: '18' # specify your Node.js version
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Create .env file with GitHub Secrets
-      - name: Create .env file
-        run: |
-          echo "SECRET_API_KEY=${{ secrets.SECRET_API_KEY }}" >> .env
-          echo "SECRET_DB_PASSWORD=${{ secrets.SECRET_DB_PASSWORD }}" >> .env
-          echo "CUSTOM_VARIABLE=${{ secrets.CUSTOM_VARIABLE }}" >> .env
-          echo "PORT=3000" >> .env
+      - name: Run tests
+        run: npm test
 
-      # Step 5: Run the server
-      - name: Start server
+      - name: Deploy
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
-          node index.js &
-          sleep 5 # Allow the server time to start
-
-      # Step 6: Test the server
-      - name: Test server response
-        run: curl -f http://localhost:3000
+          echo "Deploying the app..."
+          # Add your deployment script here
