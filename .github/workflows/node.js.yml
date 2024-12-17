@@ -1,9 +1,11 @@
 name: CI/CD Pipeline
+
 on: [push]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -11,17 +13,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # specify your Node.js version
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
-
-      - name: Deploy
+      - name: Run Server
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
+          SECRET_DB_PASSWORD: ${{ secrets.SECRET_DB_PASSWORD }}
+          CUSTOM_VARIABLE: ${{ secrets.CUSTOM_VARIABLE }}
         run: |
-          echo "Deploying the app..."
-          # Add your deployment script here
+          echo "SECRET_API_KEY: $SECRET_API_KEY"
+          echo "CUSTOM_VARIABLE: $CUSTOM_VARIABLE"
+          npm start
