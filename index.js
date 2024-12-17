@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
         apiKey: process.env.SECRET_API_KEY,
         dbPassword: process.env.SECRET_DB_PASSWORD,
     };
-    
+    //ankit
 
     const customVariable = process.env.CUSTOM_VARIABLE || "Not defined";
     console.log(secrets.apiKey);
