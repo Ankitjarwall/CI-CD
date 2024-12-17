@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
     };
 
     const customVariable = process.env.CUSTOM_VARIABLE || "Not defined";
-    // console.log(secrets.apiKey);
+    console.log(secrets.apiKey);
     if (secrets.apiKey === "api.macbease.com") {
         res.json({
             message: "Secrets retrieved successfully.",
