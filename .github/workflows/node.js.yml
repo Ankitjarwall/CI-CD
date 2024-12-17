@@ -17,17 +17,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Step 2: Export Secrets to Environment Permanently
+      - name: Export Secrets to Environment
+        run: |
+          echo "SECRET_API_KEY=${{ secrets.SECRET_API_KEY }}" >> ~/.bashrc
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ~/.bashrc
+          echo "CUSTOM_VARIABLE=${{ env.CUSTOM_VARIABLE }}" >> ~/.bashrc
+          source ~/.bashrc
+          echo "Secrets exported to ~/.bashrc"
+
       # Step 3: Install Dependencies
       - name: Install Dependencies
         run: npm install
 
-      # Step 4: Run the Server with Secrets
+      # Step 4: Start the Server with Secrets
       - name: Start Backend and Test Secrets
-        env: # Inject secrets into environment variables
-          SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          CUSTOM_VARIABLE: ${{ env.CUSTOM_VARIABLE }}
         run: |
+          source ~/.bashrc # Ensure environment variables are loaded
           node index.js & # Start the server in the background
           sleep 5 # Allow the server to start
           curl http://localhost:3000 # Test the endpoint
@@ -35,6 +41,7 @@ jobs:
       # Step 5: Validate Response
       - name: Validate Secrets in Response
         run: |
+          source ~/.bashrc # Ensure environment variables are loaded
           RESPONSE=$(curl -s http://localhost:3000)
           echo "Response: $RESPONSE"
           if [[ $RESPONSE != *"Secrets retrieved successfully."* ]]; then
