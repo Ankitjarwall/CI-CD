@@ -5,7 +5,8 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      SECRET_API_KEY: "api.macbease.com"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,10 +20,6 @@ jobs:
         run: npm install
 
       - name: Run Server
-        env:
-          SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
-          SECRET_DB_PASSWORD: ${{ secrets.SECRET_DB_PASSWORD }}
-          CUSTOM_VARIABLE: ${{ secrets.CUSTOM_VARIABLE }}
         run: |
           echo "SECRET_API_KEY: $SECRET_API_KEY"
           echo "CUSTOM_VARIABLE: $CUSTOM_VARIABLE"
