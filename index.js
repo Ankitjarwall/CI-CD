@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
         });
     } else {
         res.status(401).json({
-            message: "Unauthorized: Invalid SECRET_API_KEY",
+            message: "again Unauthorized: Invalid SECRET_API_KEY",
             status: "Failure",
             githubVariable: customVariable,
         });
