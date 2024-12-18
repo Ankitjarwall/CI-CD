@@ -13,6 +13,8 @@ sudo apt install -y nodejs
 echo "Installing PM2..."
 sudo npm install -g pm2
 
+sudo apt install certbot python3-certbot-nginx -y
+
 # Install Nginx
 echo "Installing Nginx..."
 sudo apt install nginx -y
