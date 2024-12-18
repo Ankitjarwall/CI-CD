@@ -44,7 +44,3 @@ echo "Restarting Nginx..."
 sudo systemctl restart nginx
 
 echo "Setup complete!"
-
-sudo chmod +x setup-server.sh
-
-./setup-server.sh
