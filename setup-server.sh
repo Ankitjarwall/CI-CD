@@ -14,6 +14,7 @@ echo "Installing PM2..."
 sudo npm install -g pm2
 
 sudo apt install certbot python3-certbot-nginx -y
+#sudo certbot --nginx -d api.macbease.com -d www.api.macbease.com
 
 # Install Nginx
 echo "Installing Nginx..."
