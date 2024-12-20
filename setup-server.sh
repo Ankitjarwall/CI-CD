@@ -11,7 +11,7 @@ sudo apt install -y nodejs
 
 # Install PM2
 echo "Installing PM2..."
-sudo npm install -g pm2
+sudo npm install -g npm@10
 
 sudo apt install certbot python3-certbot-nginx -y
 #sudo certbot --nginx -d api.macbease.com -d www.api.macbease.com
